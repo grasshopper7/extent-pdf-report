@@ -63,10 +63,8 @@ public class ExtentPDFReportDataGenerator {
 				.endTime(DateUtil.convertToLocalDateTime(scenarioTest.getEndTime())).build();
 		scenarios.add(scenario);
 
-		List<Hook> beforeStepHook = new ArrayList<>();
-		List<Hook> afterStepHook = new ArrayList<>();
-		boolean newStep = true;
-
+		Step step = null;
+		LoopObject loopObject = LoopObject.INITIAL;
 		for (Test stepTest : scenarioTest.getChildren()) {
 
 			if (stepTest.getBddType() == Asterisk.class) {
@@ -79,34 +77,53 @@ public class ExtentPDFReportDataGenerator {
 					addHookData(afterHook, stepTest);
 					break;
 				case BEFORE_STEP:
-					if (newStep) {
-						newStep = false;
-						beforeStepHook = new ArrayList<>();
-						afterStepHook = new ArrayList<>();
+					if (loopObject == LoopObject.INITIAL || loopObject == LoopObject.STEP
+							|| loopObject == LoopObject.AFTER_STEP) {
+						step = Step.builder().build();
 					}
-					addHookData(beforeStepHook, stepTest);
+					
+					step.addBeforeStepHook(createHook(stepTest));
+					loopObject = LoopObject.BEFORE_STEP;
 					break;
 				case AFTER_STEP:
-					newStep = true;
-					addHookData(afterStepHook, stepTest);
+					step.addAfterStepHook(createHook(stepTest));
+					loopObject = LoopObject.AFTER_STEP;
 					break;
 				}
 			} else {
-				Step step = Step.builder().name(stepTest.getName()).status(convertStatus(stepTest.getStatus()))
-						.keyword(stepTest.getBddType().getSimpleName()).errorMessage(getStackTrace(stepTest))
-						.output(getLogMessages(stepTest)).media(getMediaData(stepTest)).before(beforeStepHook).after(afterStepHook)
-						.startTime(DateUtil.convertToLocalDateTime(stepTest.getStartTime()))
-						.endTime(DateUtil.convertToLocalDateTime(stepTest.getEndTime())).build();
+				if (loopObject == LoopObject.INITIAL || loopObject == LoopObject.STEP
+						|| loopObject == LoopObject.AFTER_STEP) {
+					step = Step.builder().build();
+				}
+				
+				addStepData(step, stepTest);
 				steps.add(step);
+				loopObject = LoopObject.STEP;
 			}
 		}
 	}
 
+	private void addStepData(Step step, Test stepTest) {
+		step.setName(stepTest.getName());
+		step.setStatus(convertStatus(stepTest.getStatus()));
+		step.setKeyword(stepTest.getBddType().getSimpleName());
+		step.setErrorMessage(getStackTrace(stepTest));
+		step.setOutput(getLogMessages(stepTest));
+		step.setMedia(getMediaData(stepTest));
+		step.setStartTime(DateUtil.convertToLocalDateTime(stepTest.getStartTime()));
+		step.setEndTime(DateUtil.convertToLocalDateTime(stepTest.getEndTime()));
+	}
+
 	private void addHookData(List<Hook> hooks, Test hookTest) {
-		hooks.add(Hook.builder().location(hookTest.getName()).hookType(HookType.valueOf(hookTest.getDescription()))
+		hooks.add(createHook(hookTest));
+	}
+
+	private Hook createHook(Test hookTest) {
+		return Hook.builder().location(hookTest.getName()).hookType(HookType.valueOf(hookTest.getDescription()))
 				.status(convertStatus(hookTest.getStatus())).errorMessage(getStackTrace(hookTest))
-				.output(getLogMessages(hookTest)).media(getMediaData(hookTest)).startTime(DateUtil.convertToLocalDateTime(hookTest.getStartTime()))
-				.endTime(DateUtil.convertToLocalDateTime(hookTest.getEndTime())).build());
+				.output(getLogMessages(hookTest)).media(getMediaData(hookTest))
+				.startTime(DateUtil.convertToLocalDateTime(hookTest.getStartTime()))
+				.endTime(DateUtil.convertToLocalDateTime(hookTest.getEndTime())).build();
 	}
 
 	private Status convertStatus(com.aventstack.extentreports.Status extentStatus) {
@@ -135,7 +152,7 @@ public class ExtentPDFReportDataGenerator {
 		}
 		return output;
 	}
-	
+
 	private List<String> getMediaData(Test test) {
 		List<String> media = new ArrayList<>();
 		for (Log log : test.getLogs()) {
@@ -143,5 +160,9 @@ public class ExtentPDFReportDataGenerator {
 				media.add(log.getMedia().getPath());
 		}
 		return media;
+	}
+
+	private static enum LoopObject {
+		INITIAL, BEFORE_STEP, STEP, AFTER_STEP;
 	}
 }
