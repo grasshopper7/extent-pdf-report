@@ -32,8 +32,8 @@ public class ExtentPDFReportDataGenerator {
 			List<Scenario> scenarios = new ArrayList<>();
 			Feature feature = Feature.builder().name(featureTest.getName())
 					.status(convertStatus(featureTest.getStatus())).tags(featureTags).scenarios(scenarios)
-					.startTime(DateUtil.convertToLocalDateTime(featureTest.getStartTime()))
-					.endTime(DateUtil.convertToLocalDateTime(featureTest.getEndTime())).build();
+					.startTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getStartTime()))
+					.endTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getEndTime())).build();
 			features.add(feature);
 
 			for (Test scenarioTest : featureTest.getChildren()) {
@@ -59,8 +59,8 @@ public class ExtentPDFReportDataGenerator {
 
 		Scenario scenario = Scenario.builder().name(scenarioTest.getName())
 				.status(convertStatus(scenarioTest.getStatus())).tags(scenarioTags).steps(steps).before(beforeHook)
-				.after(afterHook).startTime(DateUtil.convertToLocalDateTime(scenarioTest.getStartTime()))
-				.endTime(DateUtil.convertToLocalDateTime(scenarioTest.getEndTime())).build();
+				.after(afterHook).startTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getStartTime()))
+				.endTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getEndTime())).build();
 		scenarios.add(scenario);
 
 		Step step = null;
@@ -110,8 +110,8 @@ public class ExtentPDFReportDataGenerator {
 		step.setErrorMessage(getStackTrace(stepTest));
 		step.setOutput(getLogMessages(stepTest));
 		step.setMedia(getMediaData(stepTest));
-		step.setStartTime(DateUtil.convertToLocalDateTime(stepTest.getStartTime()));
-		step.setEndTime(DateUtil.convertToLocalDateTime(stepTest.getEndTime()));
+		step.setStartTime(DateUtil.convertToLocalDateTimeFromDate(stepTest.getStartTime()));
+		step.setEndTime(DateUtil.convertToLocalDateTimeFromDate(stepTest.getEndTime()));
 	}
 
 	private void addHookData(List<Hook> hooks, Test hookTest) {
@@ -122,8 +122,8 @@ public class ExtentPDFReportDataGenerator {
 		return Hook.builder().location(hookTest.getName()).hookType(HookType.valueOf(hookTest.getDescription()))
 				.status(convertStatus(hookTest.getStatus())).errorMessage(getStackTrace(hookTest))
 				.output(getLogMessages(hookTest)).media(getMediaData(hookTest))
-				.startTime(DateUtil.convertToLocalDateTime(hookTest.getStartTime()))
-				.endTime(DateUtil.convertToLocalDateTime(hookTest.getEndTime())).build();
+				.startTime(DateUtil.convertToLocalDateTimeFromDate(hookTest.getStartTime()))
+				.endTime(DateUtil.convertToLocalDateTimeFromDate(hookTest.getEndTime())).build();
 	}
 
 	private Status convertStatus(com.aventstack.extentreports.Status extentStatus) {
