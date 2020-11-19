@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 * Updated cucumber PDF report version to 1.6.0
 
 
+## 1.2.0 (2020-11-3)
+
+* Updated cucumber pdf version
+
+
 ## 1.1.0 (2020-10-20)
 
 * Error in step hook parsing [Issue 1](https://github.com/grasshopper7/extent-pdf-report/issues/1)]
