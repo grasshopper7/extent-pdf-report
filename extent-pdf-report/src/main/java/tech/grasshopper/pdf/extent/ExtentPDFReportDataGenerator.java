@@ -138,10 +138,24 @@ public class ExtentPDFReportDataGenerator {
 	private String getStackTrace(Test test) {
 		String stack = "";
 		for (Log log : test.getLogs()) {
-			if (log.getException() != null)
-				stack = log.getException().getStackTrace();
+			if (log.getStatus() == com.aventstack.extentreports.Status.FAIL) {
+				//For adapter which stores failure as throwable
+				if (log.getException() != null)
+					stack = log.getException().getStackTrace();
+				//For json plugin which stores failure as markup string
+				else
+					stack = stripMarkup(log.getDetails());
+			}
 		}
 		return stack;
+	}
+	
+	private String stripMarkup(String markup) {
+		int start = markup.indexOf(">",markup.indexOf("<textarea"));
+		int end = markup.indexOf("</textarea");
+		if(start == -1 || end == -1)
+			return markup;
+		return markup.substring(start + 1, end);
 	}
 
 	private List<String> getLogMessages(Test test) {
