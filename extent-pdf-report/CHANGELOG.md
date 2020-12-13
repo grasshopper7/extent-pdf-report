@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 (2020-12-13)
+
+* Updated cucumber PDF report version to 1.7.0
+
 ## 1.4.0 (2020-11-21)
 
 * Modify handling of exception stcktrace [Issue 3](https://github.com/grasshopper7/extent-pdf-report/issues/3)]
