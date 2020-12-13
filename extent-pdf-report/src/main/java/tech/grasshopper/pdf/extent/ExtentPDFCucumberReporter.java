@@ -14,8 +14,8 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import tech.grasshopper.pdf.PDFCucumberReport;
 import tech.grasshopper.pdf.data.ReportData;
 
-public class ExtentPDFCucumberReporter extends AbstractFileReporter
-implements ReportObserver<ReportEntity> {
+public class ExtentPDFCucumberReporter extends AbstractFileReporter implements ReportObserver<ReportEntity> {
+	
 	private static final Logger logger = Logger.getLogger(ExtentPDFCucumberReporter.class.getName());
 	private static final String REPORTER_NAME = "pdf";
 	private static final String FILE_NAME = "Index.pdf";
@@ -33,7 +33,7 @@ implements ReportObserver<ReportEntity> {
 
 	public Observer<ReportEntity> getReportObserver() {
 		return new Observer<ReportEntity>() {
-			
+
 			public void onSubscribe(Disposable d) {
 				start(d);
 			}
@@ -57,8 +57,8 @@ implements ReportObserver<ReportEntity> {
 	private void flush(ReportEntity value) {
 		try {
 			report = value.getReport();
-			final String filePath = getFileNameAsExt(FILE_NAME, new String[]{".pdf"});
-			
+			final String filePath = getFileNameAsExt(FILE_NAME, new String[] { ".pdf" });
+
 			ExtentPDFReportDataGenerator generator = new ExtentPDFReportDataGenerator();
 			ReportData reportData = generator.generateReportData(report);
 
