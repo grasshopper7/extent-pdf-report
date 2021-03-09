@@ -15,20 +15,23 @@ import tech.grasshopper.pdf.PDFCucumberReport;
 import tech.grasshopper.pdf.data.ReportData;
 
 public class ExtentPDFCucumberReporter extends AbstractFileReporter implements ReportObserver<ReportEntity> {
-	
+
 	private static final Logger logger = Logger.getLogger(ExtentPDFCucumberReporter.class.getName());
 	private static final String REPORTER_NAME = "pdf";
 	private static final String FILE_NAME = "Index.pdf";
 
 	private Disposable disposable;
 	private Report report;
+	private String mediaFolder;
 
-	public ExtentPDFCucumberReporter(String path) {
+	public ExtentPDFCucumberReporter(String path, String mediaFolder) {
 		super(new File(path));
+		this.mediaFolder = mediaFolder;
 	}
 
-	public ExtentPDFCucumberReporter(File f) {
+	public ExtentPDFCucumberReporter(File f, String mediaFolder) {
 		super(f);
+		this.mediaFolder = mediaFolder;
 	}
 
 	public Observer<ReportEntity> getReportObserver() {
@@ -59,7 +62,7 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 			report = value.getReport();
 			final String filePath = getFileNameAsExt(FILE_NAME, new String[] { ".pdf" });
 
-			ExtentPDFReportDataGenerator generator = new ExtentPDFReportDataGenerator();
+			ExtentPDFReportDataGenerator generator = new ExtentPDFReportDataGenerator(mediaFolder);
 			ReportData reportData = generator.generateReportData(report);
 
 			PDFCucumberReport pdfCucumberReport = new PDFCucumberReport(reportData, new File(filePath));

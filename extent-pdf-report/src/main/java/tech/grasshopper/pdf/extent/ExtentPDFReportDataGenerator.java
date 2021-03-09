@@ -5,20 +5,31 @@ import java.util.List;
 
 import com.aventstack.extentreports.gherkin.model.Asterisk;
 import com.aventstack.extentreports.gherkin.model.ScenarioOutline;
-import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Report;
 import com.aventstack.extentreports.model.Test;
 
 import tech.grasshopper.pdf.data.ReportData;
+import tech.grasshopper.pdf.extent.processor.DataTableProcessor;
+import tech.grasshopper.pdf.extent.processor.DocStringProcessor;
+import tech.grasshopper.pdf.extent.processor.LogMessageProcessor;
+import tech.grasshopper.pdf.extent.processor.MediaProcessor;
+import tech.grasshopper.pdf.extent.processor.StackTraceProcessor;
 import tech.grasshopper.pdf.pojo.cucumber.Feature;
 import tech.grasshopper.pdf.pojo.cucumber.Hook;
 import tech.grasshopper.pdf.pojo.cucumber.Hook.HookType;
+import tech.grasshopper.pdf.pojo.cucumber.Row;
 import tech.grasshopper.pdf.pojo.cucumber.Scenario;
 import tech.grasshopper.pdf.pojo.cucumber.Status;
 import tech.grasshopper.pdf.pojo.cucumber.Step;
 import tech.grasshopper.pdf.util.DateUtil;
 
 public class ExtentPDFReportDataGenerator {
+
+	private String mediaFolder;
+
+	public ExtentPDFReportDataGenerator(String mediaFolder) {
+		this.mediaFolder = mediaFolder;
+	}
 
 	public ReportData generateReportData(Report report) {
 		List<Test> extentTests = report.getTestList();
@@ -81,7 +92,7 @@ public class ExtentPDFReportDataGenerator {
 							|| loopObject == LoopObject.AFTER_STEP) {
 						step = Step.builder().build();
 					}
-					
+
 					step.addBeforeStepHook(createHook(stepTest));
 					loopObject = LoopObject.BEFORE_STEP;
 					break;
@@ -95,7 +106,7 @@ public class ExtentPDFReportDataGenerator {
 						|| loopObject == LoopObject.AFTER_STEP) {
 					step = Step.builder().build();
 				}
-				
+
 				addStepData(step, stepTest);
 				steps.add(step);
 				loopObject = LoopObject.STEP;
@@ -112,6 +123,8 @@ public class ExtentPDFReportDataGenerator {
 		step.setMedia(getMediaData(stepTest));
 		step.setStartTime(DateUtil.convertToLocalDateTimeFromDate(stepTest.getStartTime()));
 		step.setEndTime(DateUtil.convertToLocalDateTimeFromDate(stepTest.getEndTime()));
+		step.setDocString(getDocString(stepTest));
+		step.setRows(getDataTable(stepTest));
 	}
 
 	private void addHookData(List<Hook> hooks, Test hookTest) {
@@ -135,45 +148,29 @@ public class ExtentPDFReportDataGenerator {
 		return status;
 	}
 
-	private String getStackTrace(Test test) {
-		String stack = "";
-		for (Log log : test.getLogs()) {
-			if (log.getStatus() == com.aventstack.extentreports.Status.FAIL) {
-				//For adapter which stores failure as throwable
-				if (log.getException() != null)
-					stack = log.getException().getStackTrace();
-				//For json plugin which stores failure as markup string
-				else
-					stack = stripMarkup(log.getDetails());
-			}
-		}
-		return stack;
+	private List<Row> getDataTable(Test test) {
+
+		return DataTableProcessor.builder().logs(test.getLogs()).build().process();
 	}
-	
-	private String stripMarkup(String markup) {
-		int start = markup.indexOf(">",markup.indexOf("<textarea"));
-		int end = markup.indexOf("</textarea");
-		if(start == -1 || end == -1)
-			return markup;
-		return markup.substring(start + 1, end);
+
+	private String getDocString(Test test) {
+
+		return DocStringProcessor.builder().logs(test.getLogs()).build().process();
+	}
+
+	private String getStackTrace(Test test) {
+
+		return StackTraceProcessor.builder().logs(test.getLogs()).build().process();
 	}
 
 	private List<String> getLogMessages(Test test) {
-		List<String> output = new ArrayList<>();
-		for (Log log : test.getLogs()) {
-			if (log.getStatus() == com.aventstack.extentreports.Status.INFO && !log.getDetails().isEmpty())
-				output.add(log.getDetails());
-		}
-		return output;
+
+		return LogMessageProcessor.builder().logs(test.getLogs()).build().process();
 	}
 
 	private List<String> getMediaData(Test test) {
-		List<String> media = new ArrayList<>();
-		for (Log log : test.getLogs()) {
-			if (log.getStatus() == com.aventstack.extentreports.Status.INFO && log.getMedia() != null)
-				media.add(log.getMedia().getPath());
-		}
-		return media;
+
+		return MediaProcessor.builder().logs(test.getLogs()).mediaFolder(mediaFolder).build().process();
 	}
 
 	private static enum LoopObject {

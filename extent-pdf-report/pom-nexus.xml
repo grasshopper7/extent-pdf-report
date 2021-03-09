@@ -5,10 +5,12 @@
 
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extent-pdf-report</artifactId>
-	<version>1.5.0</version>
+	<version>1.6.0</version>
 	<name>extent-pdf-report</name>
 	<url>https://grasshopper.tech</url>
-	<description>Generates Cucumber execution report in PDF format for ExtentReports</description>
+	<description>Generates Cucumber execution report in PDF format for
+		ExtentReports
+	</description>
 
 	<licenses>
 		<license>
@@ -27,17 +29,22 @@
 	</developers>
 
 	<properties>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
-		<pdfreport.version>1.7.0</pdfreport.version>
+		<pdfreport.version>2.0.0</pdfreport.version>
 		<extent.version>5.0.5</extent.version>
+		<jsoup.version>1.13.1</jsoup.version>
+		<lombok.version>1.18.18</lombok.version>
 	</properties>
 
 	<scm>
-		<connection>scm:git:git://github.com/grasshopper7/extent-pdf-report.git</connection>
-		<developerConnection>scm:git:ssh://github.com:grasshopper7/extent-pdf-report.git</developerConnection>
+		<connection>scm:git:git://github.com/grasshopper7/extent-pdf-report.git
+		</connection>
+		<developerConnection>scm:git:ssh://github.com:grasshopper7/extent-pdf-report.git
+		</developerConnection>
 		<url>https://github.com/grasshopper7/extent-pdf-report</url>
 	</scm>
 
@@ -53,6 +60,16 @@
 			<version>${extent.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
@@ -62,7 +79,8 @@
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+			</url>
 		</repository>
 	</distributionManagement>
 
