@@ -18,7 +18,8 @@ public class StackTraceProcessor {
 
 		String stack = "";
 		for (Log log : logs) {
-			if (log.getStatus() == com.aventstack.extentreports.Status.FAIL) {
+			if (log.getStatus() == com.aventstack.extentreports.Status.FAIL
+					|| log.getStatus() == com.aventstack.extentreports.Status.SKIP) {
 				// For adapter which stores failure as throwable
 				if (log.getException() != null)
 					stack = log.getException().getStackTrace();
@@ -31,6 +32,8 @@ public class StackTraceProcessor {
 	}
 
 	private String stripMarkup(String markup) {
+		if (markup == null || markup.isEmpty())
+			return "";
 		int start = markup.indexOf(">", markup.indexOf("<textarea"));
 		int end = markup.indexOf("</textarea");
 		if (start == -1 || end == -1)
