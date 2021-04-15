@@ -2,6 +2,7 @@ package tech.grasshopper.pdf.extent.processor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.aventstack.extentreports.model.Log;
 
@@ -16,17 +17,19 @@ public class StackTraceProcessor {
 
 	public String process() {
 
+		List<Log> failAndSkipLogs = logs.stream().filter(l -> l.getStatus() == com.aventstack.extentreports.Status.FAIL
+				|| l.getStatus() == com.aventstack.extentreports.Status.SKIP).collect(Collectors.toList());
+
 		String stack = "";
-		for (Log log : logs) {
-			if (log.getStatus() == com.aventstack.extentreports.Status.FAIL
-					|| log.getStatus() == com.aventstack.extentreports.Status.SKIP) {
-				// For adapter which stores failure as throwable
-				if (log.getException() != null)
-					stack = log.getException().getStackTrace();
-				// For json plugin which stores failure as markup string
-				else
-					stack = stripMarkup(log.getDetails());
-			}
+
+		for (Log log : failAndSkipLogs) {
+
+			// For adapter which stores failure as throwable
+			if (log.getException() != null)
+				stack = log.getException().getStackTrace();
+			// For json plugin which stores failure as markup string
+			else
+				stack = stripMarkup(log.getDetails());
 		}
 		return stack;
 	}
