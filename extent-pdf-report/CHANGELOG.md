@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.0 (2021-4-16)
+
+* Updated cucumber PDF report version to 1.7.0
+
 ## 1.6.0 (2020-12-13)
 
 * Add support for docstring, datatable data [Issue 4](https://github.com/grasshopper7/extent-pdf-report/issues/4)]
