@@ -5,6 +5,7 @@
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extent-pdf-report</artifactId>
 	<version>1.7.3</version>
+	<url>https://ghchirp.tech</url>
 
 	<properties>
 		<project.reporting.outputEncoding>UTF-8
