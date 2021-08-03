@@ -5,9 +5,9 @@
 
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extent-pdf-report</artifactId>
-	<version>1.7.2</version>
+	<version>1.7.3</version>
 	<name>extent-pdf-report</name>
-	<url>https://grasshopper.tech</url>
+	<url>https://ghchirp.tech</url>
 	<description>Generates Cucumber execution report in PDF format for
 		ExtentReports
 	</description>
@@ -24,7 +24,7 @@
 			<name>Grass Hopper</name>
 			<email>grass.hopper.moc@gmail.com</email>
 			<organization>Grasshopper</organization>
-			<organizationUrl>http://grasshopper.tech/</organizationUrl>
+			<organizationUrl>http://ghchirp.tech/</organizationUrl>
 		</developer>
 	</developers>
 
@@ -34,8 +34,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
-		<pdfreport.version>2.2.3</pdfreport.version>
-		<extent.version>5.0.6</extent.version>
+		<pdfreport.version>2.2.4</pdfreport.version>
+		<extent.version>5.0.8</extent.version>
 		<jsoup.version>1.13.1</jsoup.version>
 		<lombok.version>1.18.18</lombok.version>
 	</properties>
