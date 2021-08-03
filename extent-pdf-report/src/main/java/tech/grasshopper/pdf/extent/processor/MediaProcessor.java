@@ -22,6 +22,8 @@ import lombok.SneakyThrows;
 public class MediaProcessor {
 
 	private static final AtomicInteger EMBEDDED_INT = new AtomicInteger(0);
+	
+	public static final String EMBEDDED_PREFIX = "base64_generated_pdf_";
 
 	@Default
 	private List<Log> logs = new ArrayList<>();
@@ -67,7 +69,7 @@ public class MediaProcessor {
 	}
 
 	private Path createMediaFileStructure() {
-		StringBuilder fileName = new StringBuilder("base64_generated_pdf_").append(EMBEDDED_INT.incrementAndGet())
+		StringBuilder fileName = new StringBuilder(EMBEDDED_PREFIX).append(EMBEDDED_INT.incrementAndGet())
 				.append(".").append("png");
 
 		File dir = new File(mediaFolder);

@@ -13,6 +13,8 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import tech.grasshopper.pdf.PDFCucumberReport;
 import tech.grasshopper.pdf.data.ReportData;
+import tech.grasshopper.pdf.section.details.executable.MediaCleanup.CleanupType;
+import tech.grasshopper.pdf.section.details.executable.MediaCleanup.MediaCleanupOption;
 
 public class ExtentPDFCucumberReporter extends AbstractFileReporter implements ReportObserver<ReportEntity> {
 
@@ -23,15 +25,24 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 	private Disposable disposable;
 	private Report report;
 	private String mediaFolder;
+	private MediaCleanupOption mediaCleanupOption;
 
 	public ExtentPDFCucumberReporter(String path, String mediaFolder) {
-		super(new File(path));
-		this.mediaFolder = mediaFolder;
+		this(new File(path), mediaFolder, MediaCleanupOption.builder().cleanUpType(CleanupType.NONE).build());
 	}
 
 	public ExtentPDFCucumberReporter(File f, String mediaFolder) {
+		this(f, mediaFolder, MediaCleanupOption.builder().cleanUpType(CleanupType.NONE).build());
+	}
+
+	public ExtentPDFCucumberReporter(String path, String mediaFolder, MediaCleanupOption mediaCleanupOption) {
+		this(new File(path), mediaFolder, mediaCleanupOption);
+	}
+
+	public ExtentPDFCucumberReporter(File f, String mediaFolder, MediaCleanupOption mediaCleanupOption) {
 		super(f);
 		this.mediaFolder = mediaFolder;
+		this.mediaCleanupOption = mediaCleanupOption;
 	}
 
 	public Observer<ReportEntity> getReportObserver() {
@@ -65,7 +76,8 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 			ExtentPDFReportDataGenerator generator = new ExtentPDFReportDataGenerator(mediaFolder);
 			ReportData reportData = generator.generateReportData(report);
 
-			PDFCucumberReport pdfCucumberReport = new PDFCucumberReport(reportData, new File(filePath));
+			PDFCucumberReport pdfCucumberReport = new PDFCucumberReport(reportData, new File(filePath),
+					mediaCleanupOption);
 			pdfCucumberReport.createReport();
 		} catch (Exception e) {
 			disposable.dispose();
