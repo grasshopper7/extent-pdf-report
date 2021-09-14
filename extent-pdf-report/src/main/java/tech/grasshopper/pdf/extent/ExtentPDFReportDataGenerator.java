@@ -1,6 +1,7 @@
 package tech.grasshopper.pdf.extent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.aventstack.extentreports.gherkin.model.Asterisk;
@@ -78,7 +79,7 @@ public class ExtentPDFReportDataGenerator {
 		LoopObject loopObject = LoopObject.INITIAL;
 		for (Test stepTest : scenarioTest.getChildren()) {
 
-			if (stepTest.getBddType() == Asterisk.class) {
+			if (stepTest.getBddType() == Asterisk.class && isValidHook(stepTest)) {
 				HookType type = HookType.valueOf(stepTest.getDescription().toUpperCase());
 				switch (type) {
 				case BEFORE:
@@ -146,6 +147,11 @@ public class ExtentPDFReportDataGenerator {
 		else if (extentStatus == com.aventstack.extentreports.Status.FAIL)
 			status = Status.FAILED;
 		return status;
+	}
+
+	private boolean isValidHook(Test test) {
+
+		return Arrays.stream(HookType.values()).anyMatch((h) -> h.name().equals(test.getDescription().toUpperCase()));
 	}
 
 	private List<Row> getDataTable(Test test) {
