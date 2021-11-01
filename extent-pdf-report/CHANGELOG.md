@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.0 (2021-11-1)
+
+* Updated cucumber PDF report version to 2.3.0
+
 ## 1.7.4 (2021-9-14)
 
 * Fixed failed report in case of * step keyword [Issue 5](https://github.com/grasshopper7/extent-pdf-report/issues/5)]
