@@ -27,6 +27,12 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 	private String mediaFolder;
 	private MediaCleanupOption mediaCleanupOption;
 
+	/*
+	 * public ExtentPDFCucumberReporter(String path) { this(path,""); }
+	 * 
+	 * public ExtentPDFCucumberReporter(File f) { this(f, ""); }
+	 */
+
 	public ExtentPDFCucumberReporter(String path, String mediaFolder) {
 		this(new File(path), mediaFolder, MediaCleanupOption.builder().cleanUpType(CleanupType.NONE).build());
 	}
@@ -73,7 +79,8 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 			report = value.getReport();
 			final String filePath = getFileNameAsExt(FILE_NAME, new String[] { ".pdf" });
 
-			ExtentPDFReportDataGenerator generator = new ExtentPDFReportDataGenerator(mediaFolder);
+			ExtentPDFReportDataGenerator generator = ExtentPDFReportDataGenerator.builder().mediaFolder(mediaFolder)
+					.build();
 			ReportData reportData = generator.generateReportData(report);
 
 			PDFCucumberReport pdfCucumberReport = new PDFCucumberReport(reportData, new File(filePath),

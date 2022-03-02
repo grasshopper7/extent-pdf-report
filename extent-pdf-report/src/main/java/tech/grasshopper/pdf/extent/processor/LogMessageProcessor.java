@@ -5,14 +5,10 @@ import java.util.List;
 
 import com.aventstack.extentreports.model.Log;
 
-import lombok.Builder;
-import lombok.Builder.Default;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-public class LogMessageProcessor {
-
-	@Default
-	private List<Log> logs = new ArrayList<>();
+@SuperBuilder
+public class LogMessageProcessor extends Processor {
 
 	public List<String> process() {
 

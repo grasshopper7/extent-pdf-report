@@ -11,15 +11,11 @@ import org.jsoup.select.Elements;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Log;
 
-import lombok.Builder;
-import lombok.Builder.Default;
+import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.pojo.cucumber.Row;
 
-@Builder
-public class DataTableProcessor {
-
-	@Default
-	private List<Log> logs = new ArrayList<>();
+@SuperBuilder
+public class DataTableProcessor extends Processor {
 
 	public List<Row> process() {
 

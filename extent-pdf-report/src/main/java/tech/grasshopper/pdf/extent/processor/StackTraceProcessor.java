@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 
 import com.aventstack.extentreports.model.Log;
 
-import lombok.Builder;
 import lombok.Builder.Default;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-public class StackTraceProcessor {
+@SuperBuilder
+public class StackTraceProcessor extends Processor {
 
 	@Default
 	private List<Log> logs = new ArrayList<>();

@@ -2,19 +2,24 @@ package tech.grasshopper.pdf.extent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.aventstack.extentreports.gherkin.model.Asterisk;
 import com.aventstack.extentreports.gherkin.model.ScenarioOutline;
 import com.aventstack.extentreports.model.Report;
 import com.aventstack.extentreports.model.Test;
 
+import lombok.Builder;
+import lombok.Builder.Default;
 import tech.grasshopper.pdf.data.ReportData;
 import tech.grasshopper.pdf.extent.processor.DataTableProcessor;
 import tech.grasshopper.pdf.extent.processor.DocStringProcessor;
 import tech.grasshopper.pdf.extent.processor.LogMessageProcessor;
 import tech.grasshopper.pdf.extent.processor.MediaProcessor;
 import tech.grasshopper.pdf.extent.processor.StackTraceProcessor;
+import tech.grasshopper.pdf.extent.processor.data.AdditionalDataProcessor;
 import tech.grasshopper.pdf.pojo.cucumber.Feature;
 import tech.grasshopper.pdf.pojo.cucumber.Hook;
 import tech.grasshopper.pdf.pojo.cucumber.Hook.HookType;
@@ -24,13 +29,17 @@ import tech.grasshopper.pdf.pojo.cucumber.Status;
 import tech.grasshopper.pdf.pojo.cucumber.Step;
 import tech.grasshopper.pdf.util.DateUtil;
 
+@Builder
 public class ExtentPDFReportDataGenerator {
 
-	private String mediaFolder;
+	@Default
+	private String mediaFolder = "";
 
-	public ExtentPDFReportDataGenerator(String mediaFolder) {
-		this.mediaFolder = mediaFolder;
-	}
+	@Default
+	private List<AdditionalDataProcessor> featureAddDataProcessors = new ArrayList();
+
+	@Default
+	private List<AdditionalDataProcessor> scenarioAddDataProcessors = new ArrayList();
 
 	public ReportData generateReportData(Report report) {
 		List<Test> extentTests = report.getTestList();
@@ -45,7 +54,8 @@ public class ExtentPDFReportDataGenerator {
 			Feature feature = Feature.builder().name(featureTest.getName())
 					.status(convertStatus(featureTest.getStatus())).tags(featureTags).scenarios(scenarios)
 					.startTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getStartTime()))
-					.endTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getEndTime())).build();
+					.endTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getEndTime()))
+					.additionalData(getFeatureAdditionalData(featureTest)).build();
 			features.add(feature);
 
 			for (Test scenarioTest : featureTest.getChildren()) {
@@ -72,7 +82,8 @@ public class ExtentPDFReportDataGenerator {
 		Scenario scenario = Scenario.builder().name(scenarioTest.getName())
 				.status(convertStatus(scenarioTest.getStatus())).tags(scenarioTags).steps(steps).before(beforeHook)
 				.after(afterHook).startTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getStartTime()))
-				.endTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getEndTime())).build();
+				.endTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getEndTime()))
+				.additionalData(getScenarioAdditionalData(scenarioTest)).build();
 		scenarios.add(scenario);
 
 		Step step = null;
@@ -177,6 +188,24 @@ public class ExtentPDFReportDataGenerator {
 	private List<String> getMediaData(Test test) {
 
 		return MediaProcessor.builder().logs(test.getLogs()).mediaFolder(mediaFolder).build().process();
+	}
+
+	private Map<String, Object> getFeatureAdditionalData(Test test) {
+
+		return getAdditionalData(test, featureAddDataProcessors);
+	}
+
+	private Map<String, Object> getScenarioAdditionalData(Test test) {
+
+		return getAdditionalData(test, scenarioAddDataProcessors);
+	}
+
+	private Map<String, Object> getAdditionalData(Test test, List<AdditionalDataProcessor> processors) {
+		Map<String, Object> data = new HashMap<>();
+
+		for (AdditionalDataProcessor processor : processors)
+			data.put(processor.getDataProcessorKey(), processor.process(test));
+		return data;
 	}
 
 	private static enum LoopObject {

@@ -13,20 +13,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.ScreenCapture;
 
-import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-public class MediaProcessor {
+@SuperBuilder
+public class MediaProcessor extends Processor {
 
 	private static final AtomicInteger EMBEDDED_INT = new AtomicInteger(0);
-	
-	public static final String EMBEDDED_PREFIX = "base64_generated_pdf_";
 
-	@Default
-	private List<Log> logs = new ArrayList<>();
+	public static final String EMBEDDED_PREFIX = "base64_generated_pdf_";
 
 	@NonNull
 	private String mediaFolder;
@@ -47,7 +43,8 @@ public class MediaProcessor {
 						path = createNoImageFoundFileStructure().toString();
 
 				} else if (media.getBase64() != null && !media.getBase64().isEmpty()) {
-					// Generate physical file as pdfbox currently does not support base64 string image generation
+					// Generate physical file as pdfbox currently does not support base64 string
+					// image generation
 					Path mediaFile = createMediaFileStructure();
 
 					try {
@@ -69,8 +66,8 @@ public class MediaProcessor {
 	}
 
 	private Path createMediaFileStructure() {
-		StringBuilder fileName = new StringBuilder(EMBEDDED_PREFIX).append(EMBEDDED_INT.incrementAndGet())
-				.append(".").append("png");
+		StringBuilder fileName = new StringBuilder(EMBEDDED_PREFIX).append(EMBEDDED_INT.incrementAndGet()).append(".")
+				.append("png");
 
 		File dir = new File(mediaFolder);
 		// Create directory if not existing

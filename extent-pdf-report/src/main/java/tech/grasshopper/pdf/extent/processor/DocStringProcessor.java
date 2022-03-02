@@ -1,8 +1,5 @@
 package tech.grasshopper.pdf.extent.processor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,14 +7,10 @@ import org.jsoup.nodes.Element;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Log;
 
-import lombok.Builder;
-import lombok.Builder.Default;
+import lombok.experimental.SuperBuilder;
 
-@Builder
-public class DocStringProcessor {
-
-	@Default
-	private List<Log> logs = new ArrayList<>();
+@SuperBuilder
+public class DocStringProcessor extends Processor {
 
 	public String process() {
 
@@ -25,7 +18,7 @@ public class DocStringProcessor {
 
 			if (log.getStatus() != Status.PASS)
 				continue;
-			
+
 			String html = log.getDetails();
 			Document doc = Jsoup.parseBodyFragment(html);
 
