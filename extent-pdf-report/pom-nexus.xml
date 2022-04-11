@@ -5,7 +5,7 @@
 
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extent-pdf-report</artifactId>
-	<version>2.2.0</version>
+	<version>2.3.0</version>
 	<name>extent-pdf-report</name>
 	<url>https://ghchirp.tech</url>
 	<description>Generates Cucumber execution report in PDF format for
@@ -35,7 +35,7 @@
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
 		<pdfreport.version>2.6.0</pdfreport.version>
-		<ra-pdfreport.version>1.1.1</ra-pdfreport.version>
+		<ra-pdfreport.version>1.2.0</ra-pdfreport.version>
 		<extent.version>5.0.9</extent.version>
 		<jsoup.version>1.13.1</jsoup.version>
 		<lombok.version>1.18.18</lombok.version>
