@@ -1,10 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.3.0 (2022-4-12)
+* Updated cucumber PDF report version to 2.6.1
+* Updated rest assured PDF report version to 1.2.0
+* Updated jsoup version to fix vulnerability
+
 ## 2.2.0 (2022-4-2)
 
 * Updated cucumber PDF report version to 2.6.0
-* Updated rest assured PDF report version to 1.2.0
 
 ## 2.1.1 (2022-3-15)
 
