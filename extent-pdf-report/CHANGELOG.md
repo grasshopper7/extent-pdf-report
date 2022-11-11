@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.7.0 (2022-11-6)
+## 2.9.0 (2022-11-11)
+* Added status filter option
+
+## 2.8.0 (2022-11-6)
 * Updated cucumber PDF report version to 2.11.0
 
 ## 2.7.0 (2022-6-19)

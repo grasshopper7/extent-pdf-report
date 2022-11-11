@@ -8,15 +8,20 @@ import com.aventstack.extentreports.model.Report;
 import com.aventstack.extentreports.observer.ReportObserver;
 import com.aventstack.extentreports.observer.entity.ReportEntity;
 import com.aventstack.extentreports.reporter.AbstractFileReporter;
+import com.aventstack.extentreports.reporter.ReporterFilterable;
+import com.aventstack.extentreports.reporter.configuration.EntityFilters;
 
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
+import lombok.AccessLevel;
+import lombok.Getter;
 import tech.grasshopper.pdf.PDFCucumberReport;
 import tech.grasshopper.pdf.data.ReportData;
 import tech.grasshopper.pdf.section.details.executable.MediaCleanup.CleanupType;
 import tech.grasshopper.pdf.section.details.executable.MediaCleanup.MediaCleanupOption;
 
-public class ExtentPDFCucumberReporter extends AbstractFileReporter implements ReportObserver<ReportEntity> {
+public class ExtentPDFCucumberReporter extends AbstractFileReporter
+		implements ReportObserver<ReportEntity>, ReporterFilterable<ExtentPDFCucumberReporter> {
 
 	private static final Logger logger = Logger.getLogger(ExtentPDFCucumberReporter.class.getName());
 	private static final String REPORTER_NAME = "pdf";
@@ -27,11 +32,8 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 	private String mediaFolder;
 	private MediaCleanupOption mediaCleanupOption;
 
-	/*
-	 * public ExtentPDFCucumberReporter(String path) { this(path,""); }
-	 * 
-	 * public ExtentPDFCucumberReporter(File f) { this(f, ""); }
-	 */
+	@Getter(value = AccessLevel.NONE)
+	private final EntityFilters<ExtentPDFCucumberReporter> filter = new EntityFilters<>(this);
 
 	public ExtentPDFCucumberReporter(String path, String mediaFolder) {
 		this(new File(path), mediaFolder, MediaCleanupOption.builder().cleanUpType(CleanupType.NONE).build());
@@ -49,6 +51,11 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 		super(f);
 		this.mediaFolder = mediaFolder;
 		this.mediaCleanupOption = mediaCleanupOption;
+	}
+
+	@Override
+	public EntityFilters<ExtentPDFCucumberReporter> filter() {
+		return filter;
 	}
 
 	public Observer<ReportEntity> getReportObserver() {
@@ -76,7 +83,7 @@ public class ExtentPDFCucumberReporter extends AbstractFileReporter implements R
 
 	private void flush(ReportEntity value) {
 		try {
-			report = value.getReport();
+			report = filterAndGet(value.getReport(), filter.statusFilter().getStatus());
 			final String filePath = getFileNameAsExt(FILE_NAME, new String[] { ".pdf" });
 
 			ExtentPDFReportDataGenerator generator = ExtentPDFReportDataGenerator.builder().mediaFolder(mediaFolder)
