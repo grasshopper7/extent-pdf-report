@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.9.1 (2022-11-14)
+* Updated cucumber PDF report version to 2.11.1
+* Updated jsoup dependency version
+
 ## 2.9.0 (2022-11-11)
 * Added status filter option
 
