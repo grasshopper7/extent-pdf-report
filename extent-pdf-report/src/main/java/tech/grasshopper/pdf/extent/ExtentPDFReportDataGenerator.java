@@ -50,9 +50,16 @@ public class ExtentPDFReportDataGenerator {
 			List<String> featureTags = new ArrayList<>();
 			featureTest.getCategorySet().stream().forEach(c -> featureTags.add(c.getName()));
 
+			List<String> featureDevices = new ArrayList<>();
+			featureTest.getDeviceSet().stream().forEach(d -> featureDevices.add(d.getName()));
+
+			List<String> featureAuthors = new ArrayList<>();
+			featureTest.getAuthorSet().stream().forEach(a -> featureAuthors.add(a.getName()));
+
 			List<Scenario> scenarios = new ArrayList<>();
 			Feature feature = Feature.builder().name(featureTest.getName())
-					.status(convertStatus(featureTest.getStatus())).tags(featureTags).scenarios(scenarios)
+					.status(convertStatus(featureTest.getStatus())).tags(featureTags).devices(featureDevices)
+					.authors(featureAuthors).scenarios(scenarios)
 					.startTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getStartTime()))
 					.endTime(DateUtil.convertToLocalDateTimeFromDate(featureTest.getEndTime()))
 					.additionalData(getFeatureAdditionalData(featureTest)).build();
@@ -79,9 +86,16 @@ public class ExtentPDFReportDataGenerator {
 		List<String> scenarioTags = new ArrayList<>();
 		scenarioTest.getCategorySet().stream().forEach(c -> scenarioTags.add(c.getName()));
 
+		List<String> scenarioDevices = new ArrayList<>();
+		scenarioTest.getDeviceSet().stream().forEach(d -> scenarioDevices.add(d.getName()));
+
+		List<String> scenarioAuthors = new ArrayList<>();
+		scenarioTest.getAuthorSet().stream().forEach(a -> scenarioAuthors.add(a.getName()));
+
 		Scenario scenario = Scenario.builder().name(scenarioTest.getName())
-				.status(convertStatus(scenarioTest.getStatus())).tags(scenarioTags).steps(steps).before(beforeHook)
-				.after(afterHook).startTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getStartTime()))
+				.status(convertStatus(scenarioTest.getStatus())).tags(scenarioTags).devices(scenarioDevices)
+				.authors(scenarioAuthors).steps(steps).before(beforeHook).after(afterHook)
+				.startTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getStartTime()))
 				.endTime(DateUtil.convertToLocalDateTimeFromDate(scenarioTest.getEndTime()))
 				.additionalData(getScenarioAdditionalData(scenarioTest)).build();
 		scenarios.add(scenario);
