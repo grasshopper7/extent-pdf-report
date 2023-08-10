@@ -1,4 +1,4 @@
-Refer to this [article](https://ghchirp.online/2224/) for more details
+Refer to this [article](https://ghchirp.site/2224/) for more details
 
 
 **SUMMARY SECTION**

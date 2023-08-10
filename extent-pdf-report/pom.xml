@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extent-pdf-report</artifactId>
-	<version>2.11.0</version>
-	<url>https://ghchirp.online</url>
+	<version>2.12.0</version>
+	<url>https://ghchirp.site</url>
 
 	<properties>
 		<project.reporting.outputEncoding>UTF-8
@@ -13,9 +13,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
-		<pdfreport.version>2.13.0</pdfreport.version>
-		<ra-pdfreport.version>1.4.1</ra-pdfreport.version>
-		<extent.version>5.0.9</extent.version>
+		<pdfreport.version>2.14.0</pdfreport.version>
+		<ra-pdfreport.version>1.5.0</ra-pdfreport.version>
+		<extent.version>5.1.0</extent.version>
 		<jsoup.version>1.15.3</jsoup.version>
 		<lombok.version>1.18.18</lombok.version>
 	</properties>
@@ -56,8 +56,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 		</plugins>

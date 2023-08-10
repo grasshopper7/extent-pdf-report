@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.12.0 (2023-8-10)
+* Updated cucumber PDF report version to 2.14.0
+* Updated extent report version
+* Updated java version to 11
+
 ## 2.11.0 (2023-5-12)
 * Updated cucumber PDF report version to 2.13.0
 
